@@ -3,48 +3,49 @@ package com.atruskova.itunesapitesttask.data.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 @Entity
 data class Album (
     @SerializedName("collectionId")
     @PrimaryKey
-    var ID : Long,
+    var ID : String,
     @SerializedName("wrapperType")
     var WrapperType: String,
     @SerializedName("collectionType")
     var CollectionType: String,
     @SerializedName("artistId")
-    var ArtistID: Long,
+    var ArtistID: Long?,
     @SerializedName("amgArtistId")
-    var AmgArtistId: Long,
+    var AmgArtistId: Long?,
     @SerializedName("artistName")
-    var ArtistName: String,
+    var ArtistName: String?,
     @SerializedName("collectionName")
     var CollectionName: String,
     @SerializedName("collectionCensoredName")
-    var CollectionCensoredName: String,
+    var CollectionCensoredName: String?,
     @SerializedName("artistViewUrl")
-    var ArtistViewUrl: String,
+    var ArtistViewUrl: String?,
     @SerializedName("collectionViewUrl")
-    var CollectionViewUrl: String,
+    var CollectionViewUrl: String?,
     @SerializedName("artworkUrl60")
-    var ArtWorkUrl60: String,
+    var ArtWorkUrl60: String?,
     @SerializedName("artworkUrl100")
-    var ArtWorkUrl100: String,
+    var ArtWorkUrl100: String?,
     @SerializedName("collectionPrice")
-    var CollectionPrice: String,
+    var CollectionPrice: String?,
     @SerializedName("collectionExplicitness")
-    var CollectionExplictness: String,
+    var CollectionExplictness: String?,
     @SerializedName("trackCount")
-    var TrackCount: Int,
+    var TrackCount: Int?,
     @SerializedName("copyright")
-    var Copyright: String,
+    var Copyright: String?,
     @SerializedName("country")
-    var Country: String,
+    var Country: String?,
     @SerializedName("currency")
-    var Currency: String,
+    var Currency: String?,
     @SerializedName("releaseDate")
-    var ReleaseDate: String,
+    var ReleaseDate: Date?,
     @SerializedName("primaryGenreName")
-    var PrimaryGenreName: String
+    var PrimaryGenreName: String?
 )

@@ -1,19 +1,25 @@
-package com.atruskova.itunesapitesttask.data
+package com.atruskova.itunesapitesttask.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.atruskova.itunesapitesttask.data.daos.AlbumDao
 import com.atruskova.itunesapitesttask.data.entities.Album
+import com.atruskova.itunesapitesttask.data.entities.AlbumSearchResult
 
-@Database(entities = [Album::class], version = 1)
+@Database(entities = [Album::class, AlbumSearchResult::class], version = 1)
+@TypeConverters(DatabaseTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun albumDao (): AlbumDao
     companion object {
 
         private var INSTANCE: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase {
-            val tempInstance = INSTANCE
+            val tempInstance =
+                INSTANCE
             if (tempInstance != null) {
                 return tempInstance
             }

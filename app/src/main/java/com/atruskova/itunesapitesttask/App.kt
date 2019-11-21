@@ -3,7 +3,7 @@ package com.atruskova.itunesapitesttask
 import android.app.Application
 import android.content.Context
 import com.atruskova.itunesapitesttask.api.iTunesService
-import com.atruskova.itunesapitesttask.data.AppDatabase
+import com.atruskova.itunesapitesttask.data.database.AppDatabase
 
 class App : Application() {
     override fun onCreate() {
