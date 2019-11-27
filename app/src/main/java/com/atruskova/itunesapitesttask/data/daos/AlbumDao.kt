@@ -23,5 +23,8 @@ interface AlbumDao {
     @Query("SELECT * FROM Album WHERE ID in (:albumIds)")
     fun getAlbums(albumIds: List<String>?): LiveData<List<Album>>
 
+    @Query("SELECT * FROM Album WHERE ID=:albmId")
+    fun getAlbumById(albmId: String?): LiveData<Album>
+
 
 }

@@ -10,17 +10,21 @@ abstract class NetworkBoundResource <RequestType, ResultType> (private val execu
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        result.value = Resource.loading(null)
-        val dbSource = loadFromDb()
-        result.addSource(dbSource) { data ->
-            result.removeSource(dbSource)
-            if (shouldFetch(data)) {
-                fetchFromNetwork(dbSource)
-            } else {
-                result.addSource(dbSource) { newData ->
-                    setValue(Resource.success(newData))
+        try {
+            result.value = Resource.loading(null)
+            val dbSource = loadFromDb()
+            result.addSource(dbSource) { data ->
+                result.removeSource(dbSource)
+                if (shouldFetch(data)) {
+                    fetchFromNetwork(dbSource)
+                } else {
+                    result.addSource(dbSource) { newData ->
+                        setValue(Resource.success(newData))
+                    }
                 }
             }
+        } catch (e: Exception) {
+            result.value = Resource.error(null, e.message.toString())
         }
     }
 
@@ -37,16 +41,30 @@ abstract class NetworkBoundResource <RequestType, ResultType> (private val execu
             setValue(Resource.loading(newData))
         }
         executors.networkIO().execute {
-            var response = ApiResponse.create(apiResponse.execute())
-            when (response) {
-                is ApiSuccessResponse -> {
-                    executors.diskIO().execute {
-                        saveCallResult(processResponse(response))
+            try {
+                var response = ApiResponse.create(apiResponse.execute())
+                when (response) {
+                    is ApiSuccessResponse -> {
+                        executors.diskIO().execute {
+                            saveCallResult(processResponse(response))
+                            executors.mainThread().execute {
+                                result.removeSource(dbSource)
+                                // we specially request a new live data,
+                                // otherwise we will get immediately last cached value,
+                                // which may not be updated with latest results received from network.
+                                result.addSource(loadFromDb()) { newData ->
+                                    setValue(
+                                        Resource.success(
+                                            newData
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    is ApiEmptyResponse -> {
                         executors.mainThread().execute {
-                            result.removeSource(dbSource)
-                            // we specially request a new live data,
-                            // otherwise we will get immediately last cached value,
-                            // which may not be updated with latest results received from network.
+                            // reload from disk whatever we had
                             result.addSource(loadFromDb()) { newData ->
                                 setValue(
                                     Resource.success(
@@ -56,30 +74,30 @@ abstract class NetworkBoundResource <RequestType, ResultType> (private val execu
                             }
                         }
                     }
-                }
-                is ApiEmptyResponse -> {
-                    executors.mainThread().execute {
-                        // reload from disk whatever we had
-                        result.addSource(loadFromDb()) { newData ->
-                            setValue(
-                                Resource.success(
-                                    newData
+                    is ApiErrorResponse -> {
+                        executors.mainThread().execute {
+                            onFetchFailed()
+                            result.addSource(dbSource) { newData ->
+                                setValue(
+                                    Resource.error(
+                                        newData,
+                                        response.errorMessage
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
-                is ApiErrorResponse -> {
-                    executors.mainThread().execute {
-                        onFetchFailed()
-                        result.addSource(dbSource) { newData ->
-                            setValue(
-                                Resource.error(
-                                    newData,
-                                    response.errorMessage
-                                )
+            } catch (e: Exception) {
+                executors.mainThread().execute {
+                    // reload from disk whatever we had
+                    result.addSource(loadFromDb()) { newData ->
+                        setValue(
+                            Resource.error(
+                                newData,
+                                e.message.toString()
                             )
-                        }
+                        )
                     }
                 }
             }

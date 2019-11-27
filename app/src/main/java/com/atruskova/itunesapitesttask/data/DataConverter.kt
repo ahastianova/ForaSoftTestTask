@@ -1,8 +1,11 @@
 package com.atruskova.itunesapitesttask.data
 
+import com.atruskova.itunesapitesttask.App
+import com.atruskova.itunesapitesttask.R
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 object DataConverter {
         fun dateToString (date: Date?): String {
@@ -36,9 +39,35 @@ object DataConverter {
                 }
             return date
         }
-        var  getSimpleDateFormat: SimpleDateFormat =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
-        var simpleDateTimeFormatForView: SimpleDateFormat =  SimpleDateFormat("dd.MM.yyyy HH:mm")
+    @JvmStatic
+    fun priceString(price: String?, currency: String?) : String? {
+        if (!price.isNullOrEmpty()) {
+            return String.format("%s %s", price, currency)
+        }
+        return App.appContext?.getString(R.string.free)
+    }
+
+    @JvmStatic
+    fun timeFormatForView(duration: Long?) : String {
+      var result = try {
+
+          String.format("%02d:%02d",
+              TimeUnit.MILLISECONDS.toMinutes(duration!!.toLong()),
+              TimeUnit.MILLISECONDS.toSeconds(duration.toLong())- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration.toLong())))
+
+
+      } catch (e: Exception) {
+          ""
+      }
+        return result
+
+    }
+
+    var  getSimpleDateFormat: SimpleDateFormat =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+    var  getSimpleTimeFormat: SimpleDateFormat =  SimpleDateFormat("HH:mm:ss")
+
+    var simpleDateTimeFormatForView: SimpleDateFormat =  SimpleDateFormat("dd.MM.yyyy")
 
 
 }

@@ -6,13 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.atruskova.itunesapitesttask.data.daos.AlbumDao
+import com.atruskova.itunesapitesttask.data.daos.SongDao
 import com.atruskova.itunesapitesttask.data.entities.Album
 import com.atruskova.itunesapitesttask.data.entities.AlbumSearchResult
+import com.atruskova.itunesapitesttask.data.entities.Song
 
-@Database(entities = [Album::class, AlbumSearchResult::class], version = 1)
+@Database(entities = [
+    Album::class,
+    AlbumSearchResult::class,
+    Song::class], version = 1)
 @TypeConverters(DatabaseTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun albumDao (): AlbumDao
+    abstract fun songDao(): SongDao
     companion object {
 
         private var INSTANCE: AppDatabase? = null

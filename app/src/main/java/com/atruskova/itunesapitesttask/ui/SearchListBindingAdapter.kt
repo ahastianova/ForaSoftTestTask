@@ -32,6 +32,6 @@ class SearchListBindingAdapter : ListBindingAdapter<Album, AlbumListItemBinding 
 
     override fun bind(binding: AlbumListItemBinding, item: Album) {
         binding.album = item
+        binding.handler = AlbumListBindingHandler()
     }
-
 }

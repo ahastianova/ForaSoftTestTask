@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.atruskova.itunesapitesttask.data.DataConverter"/>
+        <variable
+            name="viewModel"
+            type="com.atruskova.itunesapitesttask.viewmodels.AboutFragmentViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.AboutAlbumFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/album_item_image_height"
+                android:layout_height="@dimen/album_item_image_height"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:getImage="@{viewModel.currentAlbum.artWorkUrl100}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:color/holo_blue_dark" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/album_list_item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@{viewModel.currentAlbum.collectionName}" />
+
+                <TextView
+                    android:id="@+id/album_list_item_artist_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@{viewModel.currentAlbum.artistName}"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:id="@+id/aboutAlbum_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <com.atruskova.itunesapitesttask.ui.SignedTextView
+                android:id="@+id/about_rel_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:signText="@string/releaseDate"
+                app:textValue="@{DataConverter.getStringDateTimeForView(viewModel.currentAlbum.releaseDate)}" />
+
+            <com.atruskova.itunesapitesttask.ui.SignedTextView
+                android:id="@+id/about_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:signText="@string/price"
+                app:textValue="@{DataConverter.priceString(viewModel.currentAlbum.collectionPrice, viewModel.currentAlbum.currency)}" />
+
+            <com.atruskova.itunesapitesttask.ui.SignedTextView
+                android:id="@+id/about_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:signText="@string/genre"
+                app:textValue="@{viewModel.currentAlbum.primaryGenreName }" />
+
+            <com.atruskova.itunesapitesttask.ui.SignedTextView
+                android:id="@+id/about_copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:signText="@string/copyright"
+                app:textValue="@{viewModel.currentAlbum.copyright}" />
+            <com.atruskova.itunesapitesttask.ui.SignedTextView
+                android:id="@+id/about_trackCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:signText="@string/track_count"
+                app:textValue="@{viewModel.currentAlbum.trackCount.toString()}" />
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/fragment_songs_list"
+                android:id="@+id/about_song_list_container"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

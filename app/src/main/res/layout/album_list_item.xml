@@ -4,11 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
+            name="handler"
+            type="com.atruskova.itunesapitesttask.ui.AlbumListBindingHandler" />
+        <variable
             name="album"
             type="com.atruskova.itunesapitesttask.data.entities.Album" />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:onClick="@{(view) -> handler.onClick(view, album.ID)}"
         android:layout_margin="@dimen/album_list_item_margin"
         android:layout_height="@dimen/album_list_item_height">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,41 +21,50 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/album_item_image_height"
                 android:layout_height="@dimen/album_item_image_height"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 app:getImage="@{album.artWorkUrl100}"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:color/holo_blue_dark" />
 
-            <TextView
-                android:id="@+id/album_list_item_name"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@{album.collectionName}"
-                app:layout_constraintBottom_toTopOf="@+id/album_list_item_artist_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-            <TextView
-                android:id="@+id/album_list_item_artist_name"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@{album.artistName}"
-                android:textSize="12sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/album_list_item_name" />
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/album_list_item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@{album.collectionName}" />
+
+                <TextView
+                    android:id="@+id/album_list_item_artist_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@{album.artistName}"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

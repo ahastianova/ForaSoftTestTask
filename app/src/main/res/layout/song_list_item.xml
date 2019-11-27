@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<data>
+    <import type="com.atruskova.itunesapitesttask.data.DataConverter"/>
+    <variable
+        name="song"
+        type="com.atruskova.itunesapitesttask.data.entities.Song" />
+</data>
+
+    <androidx.cardview.widget.CardView
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="@dimen/song_list_item_height">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/album_list_item_margin"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/song_count"
+                android:layout_gravity="start"
+                android:text="@{song.number}"
+                android:layout_marginRight="@dimen/album_list_item_margin"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/song_name"
+                android:ellipsize="end"
+                android:text="@{song.name}"
+                android:layout_weight="4" />
+
+            <TextView
+                android:id="@+id/song_duration"
+                android:layout_weight="1"
+                android:text="@{DataConverter.timeFormatForView(song.duration)}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="viewEnd"
+                android:layout_gravity="end"
+                android:layout_marginLeft="@dimen/album_list_item_margin"
+                android:layout_marginStart="@dimen/album_list_item_margin" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

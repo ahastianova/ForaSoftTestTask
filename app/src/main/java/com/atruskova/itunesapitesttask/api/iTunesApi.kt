@@ -15,7 +15,7 @@ interface iTunesApi {
     fun search(@Query("term") query: String) : Call<SearchApiResponse>
 
     @Headers("Content-Type: application/json")
-    @GET("/search?entity=album")
-    fun getPopularAlbums() : Call<SearchApiResponse>
+    @GET("/lookup?entity=song")
+    fun getCollectionsSongs(@Query("id") collectionId: String?) : Call<LookupSongsApiResponce>
 
 }
