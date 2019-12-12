@@ -8,6 +8,8 @@
     <string name="track_count">Tracks</string>
     <string name="free">Free</string>
     <string name="songs_list">Song\'s list</string>
+    <string name="search_tip">Enter artist or album name for search</string>
+
 
 
 </resources>

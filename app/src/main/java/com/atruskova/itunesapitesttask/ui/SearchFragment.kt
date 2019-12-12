@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.SearchViewBindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +18,7 @@ import com.atruskova.itunesapitesttask.R
 import com.atruskova.itunesapitesttask.data.Resource
 import com.atruskova.itunesapitesttask.data.entities.Album
 import com.atruskova.itunesapitesttask.data.repositories.AlbumRepository
+import com.atruskova.itunesapitesttask.databinding.FragmentSearchBinding
 import com.atruskova.itunesapitesttask.viewmodels.SearchActivityViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 
@@ -24,18 +27,27 @@ class SearchFragment : Fragment() {
     private lateinit var searchViewModel : SearchActivityViewModel
     private lateinit var adapter : SearchListBindingAdapter
     private var searchHandler =  Handler()
+    private lateinit var binding: FragmentSearchBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        searchViewModel  = ViewModelProviders.of(this).get(SearchActivityViewModel::class.java)
+    }
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        binding =  DataBindingUtil.inflate(
+            inflater, R.layout.fragment_search, container, false)
+        binding.viewmodel = searchViewModel
+        binding.lifecycleOwner = this.activity
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        searchViewModel = ViewModelProviders.of(this).get(SearchActivityViewModel::class.java)
         adapter = SearchListBindingAdapter()
         albums_list_rv.adapter = adapter
         album_list_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -53,7 +65,6 @@ class SearchFragment : Fragment() {
             }
         }
         )
-        searchViewModel.setSearchQuery("Moron")
         subscribeAlbumList(searchViewModel.currentSearchList)
     }
 

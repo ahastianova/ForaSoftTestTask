@@ -12,6 +12,7 @@ import com.atruskova.itunesapitesttask.data.repositories.AlbumRepository
 class SearchActivityViewModel: ViewModel() {
     var albumRepository = AlbumRepository()
     var searchQuery: MutableLiveData<String> = MutableLiveData()
+    var emptyQueryFlag: LiveData<Boolean> = Transformations.map(searchQuery) {it.isEmpty()}
 
     var currentSearchList: LiveData<Resource<List<Album>>> = Transformations.switchMap(searchQuery, { query ->
         if (query.isNullOrEmpty())
@@ -23,4 +24,6 @@ class SearchActivityViewModel: ViewModel() {
     fun setSearchQuery(query: String) {
         searchQuery.postValue(query)
     }
+
+
 }
